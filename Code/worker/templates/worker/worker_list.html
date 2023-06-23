@@ -1,0 +1,238 @@
+{% extends "base.html" %}
+{% block content %}
+
+
+<!-- component -->
+
+<div class="bg-white p-8 rounded-md w-full">
+	<div class=" flex items-center justify-between pb-6">
+		<div>
+			<h2 class="text-gray-600 font-semibold">Leads</h2>
+			<span class="text-xs">All products item</span>
+		</div>
+
+		<div class="pt-2 relative mx-auto text-gray-600">
+			<form method="GET" action="{% url  'worker:your_list_view' %}">
+				<input class="border-2 border-gray-300 bg-white h-10 px-5 pr-16 rounded-lg text-sm focus:outline-none"
+					type="search" name="{{ form.search_query.html_name }}" placeholder="Search"
+					id="{{form.search_query.auto_id}}">
+				<button type="submit" class="absolute right-0 top-0 mt-5 mr-4">
+					<svg class="text-gray-600 h-4 w-4 fill-current" xmlns="http://www.w3.org/2000/svg"
+						xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" id="Capa_1" x="0px" y="0px"
+						viewBox="0 0 56.966 56.966" style="enable-background:new 0 0 56.966 56.966;"
+						xml:space="preserve" width="512px" height="512px">
+						<path
+							d="M55.146,51.887L41.588,37.786c3.486-4.144,5.396-9.358,5.396-14.786c0-12.682-10.318-23-23-23s-23,10.318-23,23  s10.318,23,23,23c4.761,0,9.298-1.436,13.177-4.162l13.661,14.208c0.571,0.593,1.339,0.92,2.162,0.92  c0.779,0,1.518-0.297,2.079-0.837C56.255,54.982,56.293,53.08,55.146,51.887z M23.984,6c9.374,0,17,7.626,17,17s-7.626,17-17,17  s-17-7.626-17-17S14.61,6,23.984,6z" />
+					</svg>
+				</button>
+			</form>
+		</div>
+		<div class="flex items-center justify-between">
+			<div class="flex bg-gray-50 items-center p-2 rounded-md">
+
+			</div>
+			<div class="lg:ml-40 ml-10 space-x-8">
+				<button id="modalOpenButton"
+					class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+					Create
+				</button>
+
+				<!-- Modal -->
+				<div id="modal" class="fixed z-10 inset-0 overflow-y-auto hidden">
+					<div class="flex items-center justify-center min-h-screen p-4">
+						<div class="bg-white w-1/2 p-6 rounded shadow-lg">
+							<!-- Form -->
+							<form class="grid grid-cols-2 gap-4" method="POST" action="{% url  'worker:worker-list' %}">
+								{% csrf_token %}
+
+								<!-- Name Field -->
+								<div>
+									<label for="{{form.name.auto_id}}" class="font-bold">Name:</label>
+									<input type="text" id="{{form.name.auto_id}}" name="{{ form.name.html_name }}"
+										class="border border-gray-300 p-2 rounded">
+								</div>
+
+								<!-- Email Field -->
+								<div>
+									<label for="{{form.email.auto_id}}" class="font-bold">Email:</label>
+									<input type="email" id="{{form.email.auto_id}}" name="{{ form.email.html_name }}"
+										class="border border-gray-300 p-2 rounded">
+								</div>
+
+								<!-- Phone Field -->
+								<div>
+									<label for="{{form.name.auto_id}}" class="font-bold">Phone:</label>
+									<input type="number" id="{{form.phone.auto_id}}" name="{{ form.phone.html_name }}"
+										class="border border-gray-300 p-2 rounded">
+								</div>
+
+								<!-- Address Field -->
+								<div>
+									<label for="{{form.addr.auto_id}}" class="font-bold">Address:</label>
+									<input type="text" id="{{form.addr.auto_id}}" name="{{ form.addr.html_name }}"
+										class="border border-gray-300 p-2 rounded">
+								</div>
+
+								<!-- Agent Selection Field -->
+								<div >
+									<label for="agent" class="font-bold">Agent:</label>
+									<select id="agent" name="agent" class="border border-gray-300 p-2 rounded">
+										<option value="" disabled selected>Select an Agent</option>
+										{% for i in agents %}
+										<option value="{{ i }}">{{ i }}</option>
+										{% endfor %}
+									</select>
+								</div>
+
+								<!-- Phone Status Checkbox -->
+								<div>
+									<input type="checkbox" id="{{form.phonned.auto_id}}"
+										name="{{ form.phonned.html_name }}" class="border border-gray-300 p-2 rounded">
+									<label for="{{form.phonned.auto_id}}">Phone Status</label>
+								</div>
+								<!-- Comment Field -->
+								<div class="col-span-2">
+									<label for="{{form.comment.auto_id}}" class="font-bold">Comment:</label>
+									<input type="text" id="{{form.comment.auto_id}}" name="{{ form.comment.html_name }}"
+										class="border border-gray-300 p-2 rounded">
+								</div>
+
+								<!-- Submit Button -->
+								<div class="col-span-2 flex justify-end">
+									<button type="submit"
+										class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mr-2">
+										Submit
+									</button>
+									<button type="button" id="modalCloseButton"
+										class="bg-gray-300 hover:bg-gray-400 text-gray-700 font-bold py-2 px-4 rounded">
+										Close
+									</button>
+								</div>
+							</form>
+						</div>
+					</div>
+				</div>
+
+
+
+			</div>
+		</div>
+	</div>
+</div>
+</div>
+
+<div>
+	<div class="-mx-4 sm:-mx-8 px-4 sm:px-8 py-4 overflow-x-auto">
+		<div class="inline-block min-w-full shadow rounded-lg overflow-hidden">
+			<table class="min-w-full leading-normal">
+				<thead>
+					<tr>
+						<th
+							class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+							Name
+						</th>
+						<th
+							class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+							Phone
+						</th>
+						<th
+							class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+							Email
+						</th>
+						<th
+							class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+							Address
+						</th>
+						<th
+							class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+							Status
+						</th>
+					</tr>
+				</thead>
+				{%for i in worker%}
+				<tbody>
+					<tr>
+						<td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+							<div class="flex items-center">
+								<div class="flex-shrink-0 w-10 h-10">
+									<img class="w-full h-full rounded-full"
+										src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2.2&w=160&h=160&q=80"
+										alt="" />
+								</div>
+								<div class="ml-3">
+									<p class="text-gray-900 whitespace-no-wrap">
+										{{i.name}}
+									</p>
+								</div>
+							</div>
+						</td>
+						<td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+							<p class="text-gray-900 whitespace-no-wrap">{{i.phone}}</p>
+						</td>
+						<td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+							<p class="text-gray-900 whitespace-no-wrap">
+								{{i.email}}
+							</p>
+						</td>
+						<td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+							<p class="text-gray-900 whitespace-no-wrap">
+								{{i.addr}}
+							</p>
+						</td>
+						{%if i.phonned == 1%}
+						<td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+							<span class="relative inline-block px-3 py-1 font-semibold text-green-900 leading-tight">
+								<span aria-hidden class="absolute inset-0 bg-green-200 opacity-50 rounded-full"></span>
+								<span class="relative">{{i.phonned}}</span>
+							</span>
+						</td>
+						{%else%}
+						<td class="px-5 py-5 bg-white text-sm">
+							<span class="relative inline-block px-3 py-1 font-semibold text-red-900 leading-tight">
+								<span aria-hidden class="absolute inset-0 bg-red-200 opacity-50 rounded-full"></span>
+								<span class="relative">False</span>
+							</span>
+						</td>
+						{%endif%}
+					</tr>
+					{%endfor%}
+			</table>
+
+			<div
+				class="px-5 py-5 bg-white border-t flex flex-col xs:flex-row items-center xs:justify-between          ">
+				<span class="text-xs xs:text-sm text-gray-900">
+					Showing 1 to 4 of 50 Entries
+				</span>
+				<div class="inline-flex mt-2 xs:mt-0">
+					<button
+						class="text-sm text-indigo-50 transition duration-150 hover:bg-indigo-500 bg-indigo-600 font-semibold py-2 px-4 rounded-l">
+						Prev
+					</button>
+					&nbsp; &nbsp;
+					<button
+						class="text-sm text-indigo-50 transition duration-150 hover:bg-indigo-500 bg-indigo-600 font-semibold py-2 px-4 rounded-r">
+						Next
+					</button>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+</div>
+<script>
+	const modal = document.getElementById('modal');
+	const modalOpenButton = document.getElementById('modalOpenButton');
+	const modalCloseButton = document.getElementById('modalCloseButton');
+
+	// Open Modal
+	modalOpenButton.addEventListener('click', () => {
+		modal.classList.remove('hidden');
+	});
+
+	// Close Modal
+	modalCloseButton.addEventListener('click', () => {
+		modal.classList.add('hidden');
+	});
+</script>
+
+{% endblock content %}

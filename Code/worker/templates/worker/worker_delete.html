@@ -1,0 +1,11 @@
+{% extends 'base.html'%}
+{%  block content %}
+  
+    <a href="/worker">Go back to workerlist</a>
+    <h1>Are yo sure you want to delete</h1>
+    <form method="post">
+        {% csrf_token %}
+        {{form.as_p}}
+        <button type="submit">submit</button>
+    </form>
+{% endblock content %}

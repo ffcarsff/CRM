@@ -208,7 +208,7 @@ class SearchMixin(YourMixin):
         search_query = self.request.GET.get('search_query')
 
         if search_query:
-            queryset = queryset.filter(Q(name__icontains=search_query)|Q(email__icontains=search_query))  # Adjust the field name as per your model
+            queryset = queryset.filter(Q(name__icontains=search_query)|Q(email__icontains=search_query)|Q(phone__icontains=search_query))  # Adjust the field name as per your model
 
         return queryset
 
